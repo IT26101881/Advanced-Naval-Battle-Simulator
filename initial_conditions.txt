@@ -1,0 +1,45 @@
+===== INITIAL BATTLEFIELD CONDITIONS =====
+
+Battlefield Size: 100.00
+
+===== BATTLESHIP =====
+Type: U
+Position: (50.00, 50.00)
+Maximum Shell Velocity: 150.00
+
+Number of Escort Ships: 3
+
+===== ESCORT SHIPS =====
+
+Escort Ship 1
+Type: EC
+Position: (18.43, 94.42)
+Minimum Velocity: 0.00
+Maximum Velocity: 120.00
+Actual Velocity: 10.52
+Minimum Angle: 25.00 degrees
+Maximum Angle: 90.00 degrees
+Actual Angle: 84.51 degrees
+Impact Power: 0.07
+
+Escort Ship 2
+Type: EC
+Position: (50.62, 94.53)
+Minimum Velocity: 0.00
+Maximum Velocity: 120.00
+Actual Velocity: 88.10
+Minimum Angle: 25.00 degrees
+Maximum Angle: 90.00 degrees
+Actual Angle: 77.00 degrees
+Impact Power: 0.07
+
+Escort Ship 3
+Type: ED
+Position: (60.85, 98.83)
+Minimum Velocity: 0.00
+Maximum Velocity: 105.00
+Actual Velocity: 15.02
+Minimum Angle: 50.00 degrees
+Maximum Angle: 90.00 degrees
+Actual Angle: 81.80 degrees
+Impact Power: 0.05
