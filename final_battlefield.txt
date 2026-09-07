@@ -1,0 +1,38 @@
+===== FINAL BATTLEFIELD =====
+
+===== BATTLESHIP =====
+Type: U
+Position: (67.81, 72.81)
+Status: Survived
+
+===== ESCORT SHIPS =====
+
+Escort Ship 1
+Type: ED
+Position: (86.98, 43.05)
+Status: Destroyed
+Time to Hit: 0.13 seconds
+
+Escort Ship 2
+Type: EC
+Position: (31.50, 26.66)
+Status: Destroyed
+Time to Hit: 0.47 seconds
+
+Escort Ship 3
+Type: ED
+Position: (31.14, 70.15)
+Status: Destroyed
+Time to Hit: 0.50 seconds
+
+Escort Ship 4
+Type: EA
+Position: (71.65, 97.32)
+Status: Destroyed
+Time to Hit: 0.51 seconds
+
+Escort Ship 5
+Type: EA
+Position: (48.89, 22.47)
+Status: Destroyed
+Time to Hit: 0.35 seconds

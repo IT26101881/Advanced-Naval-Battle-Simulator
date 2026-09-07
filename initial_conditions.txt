@@ -5,41 +5,63 @@ Battlefield Size: 100.00
 ===== BATTLESHIP =====
 Type: U
 Position: (50.00, 50.00)
-Maximum Shell Velocity: 150.00
+Maximum Shell Velocity: 100.00
 
-Number of Escort Ships: 3
+Number of Escort Ships: 5
 
 ===== ESCORT SHIPS =====
 
 Escort Ship 1
-Type: EC
-Position: (18.43, 94.42)
+Type: ED
+Position: (86.98, 43.05)
 Minimum Velocity: 0.00
-Maximum Velocity: 120.00
-Actual Velocity: 10.52
-Minimum Angle: 25.00 degrees
+Maximum Velocity: 70.00
+Actual Velocity: 19.14
+Minimum Angle: 50.00 degrees
 Maximum Angle: 90.00 degrees
-Actual Angle: 84.51 degrees
-Impact Power: 0.07
+Actual Angle: 54.59 degrees
+Impact Power: 0.05
 
 Escort Ship 2
 Type: EC
-Position: (50.62, 94.53)
+Position: (31.50, 26.66)
 Minimum Velocity: 0.00
-Maximum Velocity: 120.00
-Actual Velocity: 88.10
+Maximum Velocity: 80.00
+Actual Velocity: 17.24
 Minimum Angle: 25.00 degrees
 Maximum Angle: 90.00 degrees
-Actual Angle: 77.00 degrees
+Actual Angle: 81.50 degrees
 Impact Power: 0.07
 
 Escort Ship 3
 Type: ED
-Position: (60.85, 98.83)
+Position: (31.14, 70.15)
 Minimum Velocity: 0.00
-Maximum Velocity: 105.00
-Actual Velocity: 15.02
+Maximum Velocity: 70.00
+Actual Velocity: 62.56
 Minimum Angle: 50.00 degrees
 Maximum Angle: 90.00 degrees
-Actual Angle: 81.80 degrees
+Actual Angle: 86.05 degrees
 Impact Power: 0.05
+
+Escort Ship 4
+Type: EA
+Position: (71.65, 97.32)
+Minimum Velocity: 0.00
+Maximum Velocity: 120.00
+Actual Velocity: 66.32
+Minimum Angle: 20.00 degrees
+Maximum Angle: 90.00 degrees
+Actual Angle: 39.46 degrees
+Impact Power: 0.08
+
+Escort Ship 5
+Type: EA
+Position: (48.89, 22.47)
+Minimum Velocity: 0.00
+Maximum Velocity: 120.00
+Actual Velocity: 21.74
+Minimum Angle: 20.00 degrees
+Maximum Angle: 90.00 degrees
+Actual Angle: 44.18 degrees
+Impact Power: 0.08

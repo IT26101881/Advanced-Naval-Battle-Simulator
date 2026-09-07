@@ -3,226 +3,21 @@
 #include <time.h>
 #include <math.h>
 
+#include "battleship.h"
+#include "physics.h"
+#include "escort.h"
+#include "battlefield.h"
+#include "file_handler.h"
+
+double generateRandomValue(double minimum, double maximum);
+
 #define PI 3.141592653589793
 
-struct EscortShip
+struct MovementPoint
 {
-    int id;
-    char type[3];
-
     double x;
     double y;
-
-    double minVelocity;
-    double maxVelocity;
-    double velocity;
-
-    double minAngle;
-    double maxAngle;
-    double angle;
-
-    double impactPower;
-    double gamma;
-    double hitTime;
-
-    int destroyed;
 };
-
-struct Battleship
-{
-    char type;
-
-    double x;
-    double y;
-
-    double maxVelocity;
-
-    double gamma;
-
-    double damage;
-
-    int destroyed;
-};
-
-struct Battlefield
-{
-    double size;
-
-    struct Battleship battleship;
-
-    struct EscortShip escorts[100];
-
-    int numberOfEscorts;
-};
-
-double generateRandomValue(double minimum, double maximum)
-{
-    return minimum +
-           ((double)rand() / RAND_MAX) *
-           (maximum - minimum);
-}
-
-void generateEscortType(struct EscortShip *escort)
-{
-    int typeNumber;
-
-    typeNumber = rand() % 5;
-
-    if (typeNumber == 0)
-    {
-        escort->type[0] = 'E';
-        escort->type[1] = 'A';
-    }
-    else if (typeNumber == 1)
-    {
-        escort->type[0] = 'E';
-        escort->type[1] = 'B';
-    }
-    else if (typeNumber == 2)
-    {
-        escort->type[0] = 'E';
-        escort->type[1] = 'C';
-    }
-    else if (typeNumber == 3)
-    {
-        escort->type[0] = 'E';
-        escort->type[1] = 'D';
-    }
-    else
-    {
-        escort->type[0] = 'E';
-        escort->type[1] = 'E';
-    }
-
-    escort->type[2] = '\0';
-}
-
-void setEscortProperties(struct EscortShip *escort,
-                         double battleshipMaxVelocity)
-{
-    if (escort->type[1] == 'A')
-    {
-        escort->impactPower = 0.08;
-        escort->minAngle = 20;
-
-        escort->minVelocity = 0;
-        escort->maxVelocity = 1.2 * battleshipMaxVelocity;
-    }
-    else if (escort->type[1] == 'B')
-    {
-        escort->impactPower = 0.06;
-        escort->minAngle = 30;
-
-        escort->minVelocity = 0;
-        escort->maxVelocity = 0.9 * battleshipMaxVelocity;
-    }
-    else if (escort->type[1] == 'C')
-    {
-        escort->impactPower = 0.07;
-        escort->minAngle = 25;
-
-        escort->minVelocity = 0;
-        escort->maxVelocity = 0.8 * battleshipMaxVelocity;
-    }
-    else if (escort->type[1] == 'D')
-    {
-        escort->impactPower = 0.05;
-        escort->minAngle = 50;
-
-        escort->minVelocity = 0;
-        escort->maxVelocity = 0.7 * battleshipMaxVelocity;
-    }
-    else if (escort->type[1] == 'E')
-    {
-        escort->impactPower = 0.04;
-        escort->minAngle = 70;
-
-        escort->minVelocity = 0;
-        escort->maxVelocity = 0.6 * battleshipMaxVelocity;
-    }
-
-    escort->maxAngle = 90;
-
-    escort->velocity =
-        generateRandomValue(escort->minVelocity,
-                            escort->maxVelocity);
-
-    escort->angle =
-        generateRandomValue(escort->minAngle,
-                            escort->maxAngle);
-
-    escort->destroyed = 0;
-    escort->hitTime = 0;
-}
-
-void generateEscortPosition(struct EscortShip *escort,
-                            double battlefieldSize)
-{
-    escort->x =
-        ((double)rand() / RAND_MAX) * battlefieldSize;
-
-    escort->y =
-        ((double)rand() / RAND_MAX) * battlefieldSize;
-}
-
-double calculateRange(double velocity, double angle)
-{
-    double gravity = 9.81;
-    double angleRadians;
-    double range;
-
-    angleRadians = angle * PI / 180.0;
-
-    range = (velocity * velocity *
-             sin(2 * angleRadians)) / gravity;
-
-    return range;
-}
-
-double calculateFiringAngle(double velocity, double distance)
-{
-    double gravity = 9.81;
-    double value;
-    double angleRadians;
-    double angleDegrees;
-
-    value = (distance * gravity) /
-            (velocity * velocity);
-
-    if (value > 1)
-    {
-        return -1;
-    }
-
-    angleRadians = asin(value) / 2.0;
-
-    angleDegrees = angleRadians * 180.0 / PI;
-
-    return angleDegrees;
-}
-
-double calculateFlightTime(double velocity, double angle)
-{
-    double gravity = 9.81;
-    double angleRadians;
-    double time;
-
-    angleRadians = angle * PI / 180.0;
-
-    time = (2 * velocity * sin(angleRadians)) / gravity;
-
-    return time;
-}
-
-double calculateDistance(double x1, double y1, double x2, double y2)
-{
-    double distance;
-
-    distance = sqrt((x2 - x1) * (x2 - x1) +
-                    (y2 - y1) * (y2 - y1));
-
-    return distance;
-}
 
 int isWithinRange(double velocity, double angle,
                  double x1, double y1,
@@ -245,193 +40,56 @@ int isWithinRange(double velocity, double angle,
     }
 }
 
-int battleshipCanReach(struct Battleship *battleship,
-                       struct EscortShip *escort)
+void generateBattleshipPositions(struct Battlefield *battlefield,
+                                 struct MovementPoint points[],
+                                 int k)
 {
-    double distance;
-    double maximumRange;
+    printf("\n===== BATTLESHIP MOVEMENT POINTS =====\n");
 
-    distance = calculateDistance(
-        battleship->x,
-        battleship->y,
-        escort->x,
-        escort->y
-    );
-
-    maximumRange = calculateRange(
-        battleship->maxVelocity,
-        45
-    );
-
-    if (distance <= maximumRange)
+    for (int i = 0; i < k; i++)
     {
-        return 1;
-    }
-    else
-    {
-        return 0;
+        points[i].x =
+            generateRandomValue(0, battlefield->size);
+
+        points[i].y =
+            generateRandomValue(0, battlefield->size);
+
+        printf("Point %d: (%.2f, %.2f)\n",
+               i + 1,
+               points[i].x,
+               points[i].y);
     }
 }
 
-int battleshipAttack(struct Battleship *battleship,
-                     struct EscortShip *escort)
+void runSimulationAtPoint(struct Battlefield *battlefield,
+                          double x,
+                          double y,
+                          int pointNumber)
 {
-    double distance;
-    double firingAngle;
-    double flightTime;
+    double battleEndTime = 0;
+    int wasDestroyed[100];
 
-    distance = calculateDistance(
-        battleship->x,
-        battleship->y,
-        escort->x,
-        escort->y
-    );
+    printf("\n------------------------------------\n");
+    printf("          BATTLE POSITION %d\n", pointNumber);
+    printf("------------------------------------\n");
 
-    firingAngle = calculateFiringAngle(
-        battleship->maxVelocity,
-        distance
-    );
+    battlefield->battleship.x = x;
+    battlefield->battleship.y = y;
 
-    if (firingAngle == -1)
+    printf("Battleship Position: (%.2f, %.2f)\n",
+           battlefield->battleship.x,
+           battlefield->battleship.y);
+
+    /*
+     * Remember which Escort Ships were already destroyed
+     * before this movement point.
+     */
+    for (int i = 0; i < battlefield->numberOfEscorts; i++)
     {
-        return 0;
+        wasDestroyed[i] = battlefield->escorts[i].destroyed;
     }
 
-    flightTime = calculateFlightTime(
-        battleship->maxVelocity,
-        firingAngle
-    );
-
-    escort->hitTime = flightTime;
-    escort->destroyed = 1;
-
-    printf("Time to hit: %.2f seconds\n",
-           flightTime);
-
-    return 1;
-}
-
-void attackAllEscorts(struct Battleship *battleship,
-                      struct EscortShip escorts[],
-                      int numberOfEscorts)
-{
-    int hitCount = 0;
-
-    for (int i = 0; i < numberOfEscorts; i++)
-    {
-        if (escorts[i].destroyed == 0)
-        {
-            if (battleshipAttack(battleship, &escorts[i]) == 1)
-            {
-                hitCount++;
-
-                printf("Battleship hit Escort Ship %d.\n",
-                       escorts[i].id);
-            }
-            else
-            {
-                printf("Battleship missed Escort Ship %d.\n",
-                       escorts[i].id);
-            }
-        }
-    }
-
-    printf("\nTotal Escort Ships hit: %d\n", hitCount);
-}
-
-int escortCanReachBattleship(struct EscortShip *escort,
-                             struct Battleship *battleship)
-{
-    double distance;
-    double range;
-
-    distance = calculateDistance(
-        escort->x,
-        escort->y,
-        battleship->x,
-        battleship->y
-    );
-
-    range = calculateRange(
-        escort->velocity,
-        escort->angle
-    );
-
-    if (distance <= range)
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-int escortAttack(struct EscortShip *escort,
-                 struct Battleship *battleship)
-{
-    if (escortCanReachBattleship(escort, battleship) == 1)
-    {
-        battleship->destroyed = 1;
-        return 1;
-    }
-
-    return 0;
-}
-
-void attackBattleship(struct Battleship *battleship,
-                      struct EscortShip escorts[],
-                      int numberOfEscorts)
-{
-    for (int i = 0; i < numberOfEscorts; i++)
-    {
-        if (escorts[i].destroyed == 0)
-        {
-            if (escortAttack(&escorts[i], battleship) == 1)
-            {
-                printf("Escort Ship %d hit the Battleship.\n",
-                       escorts[i].id);
-
-                printf("Battleship has been destroyed!\n");
-
-                return;
-            }
-            else
-            {
-                printf("Escort Ship %d missed the Battleship.\n",
-                       escorts[i].id);
-            }
-        }
-    }
-
-    printf("Battleship survived all Escort attacks.\n");
-}
-
-int countDestroyedEscorts(struct EscortShip escorts[],
-                          int numberOfEscorts)
-{
-    int count = 0;
-
-    for (int i = 0; i < numberOfEscorts; i++)
-    {
-        if (escorts[i].destroyed == 1)
-        {
-            count++;
-        }
-    }
-
-    return count;
-}
-
-void runBattleSimulation(struct Battlefield *battlefield)
-{
-    //double battleTime = 0.0;
-
-    printf("\n====================================\n");
-    printf("        BATTLE SIMULATION\n");
-    printf("====================================\n");
-
-    printf("\n--- Battleship Attack ---\n");
+    printf("\nBattleship is firing...\n\n");
 
     attackAllEscorts(
         &battlefield->battleship,
@@ -439,22 +97,40 @@ void runBattleSimulation(struct Battlefield *battlefield)
         battlefield->numberOfEscorts
     );
 
-    int destroyedCount;
+    /*
+     * Calculate Battle End Time using only Escort Ships
+     * destroyed at this movement point.
+     */
+    for (int i = 0; i < battlefield->numberOfEscorts; i++)
+    {
+        if (wasDestroyed[i] == 0 &&
+            battlefield->escorts[i].destroyed == 1)
+        {
+            if (battlefield->escorts[i].hitTime > battleEndTime)
+            {
+                battleEndTime = battlefield->escorts[i].hitTime;
+            }
+        }
+    }
 
-    destroyedCount = countDestroyedEscorts(
-    battlefield->escorts,
-    battlefield->numberOfEscorts
-);
-
-printf("\nEscort Ships destroyed: %d\n", destroyedCount);
+    if (battleEndTime > 0)
+    {
+        printf("\nBattle End Time: %.2f seconds\n",
+               battleEndTime);
+    }
+    else
+    {
+        printf("\nNo Escort Ships were hit at this position.\n");
+    }
 
     if (battlefield->battleship.destroyed == 1)
     {
-        printf("\nBattleship was destroyed.\n");
+        printf("\nBattleship was destroyed at Point %d.\n",
+               pointNumber);
         return;
     }
 
-    printf("\n--- Escort Attack ---\n");
+    printf("\nEnemy ships are returning fire...\n\n");
 
     attackBattleship(
         &battlefield->battleship,
@@ -464,84 +140,14 @@ printf("\nEscort Ships destroyed: %d\n", destroyedCount);
 
     if (battlefield->battleship.destroyed == 1)
     {
-        printf("\nResult: Battleship was destroyed.\n");
+        printf("\nBattleship was destroyed at Point %d.\n",
+               pointNumber);
     }
     else
     {
-        printf("\nResult: Battleship survived.\n");
+        printf("\nBattleship survived at Point %d.\n",
+               pointNumber);
     }
-}
-
-void saveInitialConditions(struct Battlefield *battlefield)
-{
-    FILE *file;
-
-    file = fopen("initial_conditions.txt", "w");
-
-    if (file == NULL)
-    {
-        printf("Error: Could not create initial_conditions.txt\n");
-        return;
-    }
-
-    fprintf(file, "===== INITIAL BATTLEFIELD CONDITIONS =====\n\n");
-
-    fprintf(file, "Battlefield Size: %.2f\n\n",
-            battlefield->size);
-
-    fprintf(file, "===== BATTLESHIP =====\n");
-    fprintf(file, "Type: %c\n",
-            battlefield->battleship.type);
-
-    fprintf(file, "Position: (%.2f, %.2f)\n",
-            battlefield->battleship.x,
-            battlefield->battleship.y);
-
-    fprintf(file, "Maximum Shell Velocity: %.2f\n\n",
-            battlefield->battleship.maxVelocity);
-
-    fprintf(file, "Number of Escort Ships: %d\n\n",
-            battlefield->numberOfEscorts);
-
-    fprintf(file, "===== ESCORT SHIPS =====\n");
-
-    for (int i = 0; i < battlefield->numberOfEscorts; i++)
-    {
-        fprintf(file, "\nEscort Ship %d\n",
-                battlefield->escorts[i].id);
-
-        fprintf(file, "Type: %s\n",
-                battlefield->escorts[i].type);
-
-        fprintf(file, "Position: (%.2f, %.2f)\n",
-                battlefield->escorts[i].x,
-                battlefield->escorts[i].y);
-
-        fprintf(file, "Minimum Velocity: %.2f\n",
-                battlefield->escorts[i].minVelocity);
-
-        fprintf(file, "Maximum Velocity: %.2f\n",
-                battlefield->escorts[i].maxVelocity);
-
-        fprintf(file, "Actual Velocity: %.2f\n",
-                battlefield->escorts[i].velocity);
-
-        fprintf(file, "Minimum Angle: %.2f degrees\n",
-                battlefield->escorts[i].minAngle);
-
-        fprintf(file, "Maximum Angle: %.2f degrees\n",
-                battlefield->escorts[i].maxAngle);
-
-        fprintf(file, "Actual Angle: %.2f degrees\n",
-                battlefield->escorts[i].angle);
-
-        fprintf(file, "Impact Power: %.2f\n",
-                battlefield->escorts[i].impactPower);
-    }
-
-    fclose(file);
-
-    printf("\nInitial conditions saved to initial_conditions.txt\n");
 }
 
 int main()
@@ -585,7 +191,6 @@ int main()
     printf("Enter number of Escort Ships: ");
     scanf("%d", &battlefield.numberOfEscorts);
 
-
     // Escort ship setup
 
     printf("\n===== Escort Ship Setup =====\n");
@@ -609,6 +214,19 @@ int main()
             battlefield.size
         );
     }
+
+    int k;
+
+    printf("\nEnter number of Battleship movement points (k): ");
+    scanf("%d", &k);
+
+    struct MovementPoint points[k];
+
+    generateBattleshipPositions(
+        &battlefield,
+        points,
+        k
+    );
 
 
     // Display battleship information
@@ -669,7 +287,34 @@ int main()
 
     saveInitialConditions(&battlefield);
 
-    runBattleSimulation(&battlefield);
+    printf("\n\n====================================\n");
+    printf("          NAVAL BATTLE\n");
+    printf("====================================\n");
+
+    for (int i = 0; i < k; i++)
+    {
+        if (battlefield.battleship.destroyed == 1)
+        {
+            printf("\nBattleship has been destroyed.");
+            printf("\nSimulation stopped at Point %d.\n", i + 1);
+            break;
+        }
+
+        runSimulationAtPoint(
+            &battlefield,
+            points[i].x,
+            points[i].y,
+            i + 1
+        );
+
+        printf("\nEscort Ships destroyed so far: %d\n",
+            countDestroyedEscorts(
+                battlefield.escorts,
+                battlefield.numberOfEscorts
+                ));
+    }
+
+    saveFinalBattlefield(&battlefield);
    
     return 0;
 }
