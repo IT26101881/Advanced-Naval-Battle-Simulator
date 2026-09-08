@@ -24,11 +24,14 @@ double calculateFlightTime(double velocity, double angle)
     return (2 * velocity * sin(angleRadians)) / gravity;
 }
 
-double calculateFiringAngle(double velocity, double distance)
+double calculateFiringAngle(double velocity,
+                            double distance,
+                            double minimumAngle)
 {
     double gravity = 9.81;
     double value;
-    double angleRadians;
+    double lowAngle;
+    double highAngle;
 
     if (velocity <= 0)
     {
@@ -43,9 +46,33 @@ double calculateFiringAngle(double velocity, double distance)
         return -1;
     }
 
-    angleRadians = asin(value) / 2.0;
+    /*
+     * Calculate the two possible firing angles.
+     */
+    lowAngle = asin(value) / 2.0;
+    lowAngle = lowAngle * 180.0 / PI;
 
-    return angleRadians * 180.0 / PI;
+    highAngle = 90.0 - lowAngle;
+
+    /*
+     * Use the low angle if it satisfies
+     * the minimum firing angle.
+     */
+    if (lowAngle >= minimumAngle)
+    {
+        return lowAngle;
+    }
+
+    /*
+     * Otherwise, try the high-angle solution.
+     */
+    if (highAngle >= minimumAngle &&
+        highAngle <= 90.0)
+    {
+        return highAngle;
+    }
+
+    return -1;
 }
 
 double calculateDistance(double x1, double y1,
@@ -54,5 +81,3 @@ double calculateDistance(double x1, double y1,
     return sqrt((x2 - x1) * (x2 - x1) +
                 (y2 - y1) * (y2 - y1));
 }
-
-

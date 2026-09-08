@@ -43,7 +43,8 @@ int escortAttack(struct EscortShip *escort,
 
 void attackBattleship(struct Battleship *battleship,
                       struct EscortShip escorts[],
-                      int numberOfEscorts);
+                      int numberOfEscorts,
+                      int wasDestroyed[]);
 
 int countDestroyedEscorts(struct EscortShip escorts[],
                           int numberOfEscorts);

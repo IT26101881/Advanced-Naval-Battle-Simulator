@@ -100,6 +100,22 @@ void saveFinalBattlefield(struct Battlefield *battlefield)
             battlefield->battleship.x,
             battlefield->battleship.y);
 
+    fprintf(file, "Maximum Velocity: %.2f\n",
+        battlefield->battleship.maxVelocity);
+
+    fprintf(file, "Minimum Angle: %.2f degrees\n",
+        battlefield->battleship.minAngle);
+
+    fprintf(file, "Maximum Angle: %.2f degrees\n",
+        battlefield->battleship.maxAngle);
+        
+    fprintf(file, "Damage: %.2f%%\n",
+            battlefield->battleship.damage * 100);
+
+    fprintf(file, "Health: %.2f%%\n",
+             (1.0 - battlefield->battleship.damage) * 100);
+
+
     if (battlefield->battleship.destroyed == 1)
     {
         fprintf(file, "Status: Destroyed\n");
@@ -139,4 +155,63 @@ void saveFinalBattlefield(struct Battlefield *battlefield)
     fclose(file);
 
     printf("Final battlefield saved to final_battlefield.txt\n");
+}
+
+void saveSimulation2FinalBattlefield(
+    struct Battlefield *battlefield)
+{
+    FILE *file;
+
+    file = fopen("simulation2_final_battlefield.txt", "w");
+
+    if (file == NULL)
+    {
+        printf("Error opening Simulation 2 output file.\n");
+        return;
+    }
+
+    fprintf(file, "===== SIMULATION 2 FINAL BATTLEFIELD =====\n\n");
+
+    fprintf(file, "Battleship\n");
+    fprintf(file, "Type: %c\n", battlefield->battleship.type);
+    fprintf(file, "Position: (%.2f, %.2f)\n",
+            battlefield->battleship.x,
+            battlefield->battleship.y);
+    fprintf(file, "Maximum Shell Velocity: %.2f\n",
+            battlefield->battleship.maxVelocity);
+    fprintf(file, "Minimum Firing Angle: %.2f\n",
+            battlefield->battleship.minAngle);
+    fprintf(file, "Maximum Firing Angle: %.2f\n",
+            battlefield->battleship.maxAngle);
+    fprintf(file, "Damage: %.2f\n",
+            battlefield->battleship.damage);
+    fprintf(file, "Destroyed: %d\n\n",
+            battlefield->battleship.destroyed);
+
+    fprintf(file, "Escort Ships\n");
+    fprintf(file, "Number of Escort Ships: %d\n\n",
+            battlefield->numberOfEscorts);
+
+    for (int i = 0; i < battlefield->numberOfEscorts; i++)
+    {
+        fprintf(file, "Escort Ship %d\n",
+                battlefield->escorts[i].id);
+
+        fprintf(file, "Type: %s\n",
+                battlefield->escorts[i].type);
+
+        fprintf(file, "Position: (%.2f, %.2f)\n",
+                battlefield->escorts[i].x,
+                battlefield->escorts[i].y);
+
+        fprintf(file, "Destroyed: %d\n",
+                battlefield->escorts[i].destroyed);
+
+        fprintf(file, "Hit Time: %.2f\n\n",
+                battlefield->escorts[i].hitTime);
+    }
+
+    fclose(file);
+
+    printf("Simulation 2 final battlefield saved to simulation2_final_battlefield.txt\n");
 }

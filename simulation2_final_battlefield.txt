@@ -1,0 +1,38 @@
+===== SIMULATION 2 FINAL BATTLEFIELD =====
+
+Battleship
+Type: U
+Position: (39.37, 57.66)
+Maximum Shell Velocity: 90.00
+Minimum Firing Angle: 15.00
+Maximum Firing Angle: 90.00
+Damage: 0.07
+Destroyed: 0
+
+Escort Ships
+Number of Escort Ships: 4
+
+Escort Ship 1
+Type: EE
+Position: (35.34, 22.58)
+Destroyed: 1
+Hit Time: 0.91
+
+Escort Ship 2
+Type: EE
+Position: (13.96, 62.90)
+Destroyed: 1
+Hit Time: 0.73
+
+Escort Ship 3
+Type: EE
+Position: (53.09, 48.49)
+Destroyed: 1
+Hit Time: 0.57
+
+Escort Ship 4
+Type: EC
+Position: (23.37, 52.35)
+Destroyed: 1
+Hit Time: 0.71
+

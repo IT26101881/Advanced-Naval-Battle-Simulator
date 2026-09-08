@@ -7,4 +7,8 @@ void saveInitialConditions(struct Battlefield *battlefield);
 
 void saveFinalBattlefield(struct Battlefield *battlefield);
 
+void saveSimulation2FinalBattlefield(
+    struct Battlefield *battlefield
+);
+
 #endif

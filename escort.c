@@ -152,34 +152,57 @@ int escortAttack(struct EscortShip *escort,
 {
     if (escortCanReachBattleship(escort, battleship) == 1)
     {
-        battleship->destroyed = 1;
         return 1;
     }
     else
     {
         return 0;
     }
-
-
 }
 
 void attackBattleship(struct Battleship *battleship,
                       struct EscortShip escorts[],
-                      int numberOfEscorts)
+                      int numberOfEscorts,
+                      int wasDestroyed[])
 {
+    int hitCount = 0;
+
     for (int i = 0; i < numberOfEscorts; i++)
     {
-        if (escorts[i].destroyed == 0)
+        /*
+         * Only Escort Ships that were alive at the
+         * beginning of this battle position can fire.
+         */
+        if (wasDestroyed[i] == 0)
         {
             if (escortAttack(&escorts[i], battleship) == 1)
             {
+                hitCount++;
+
+                battleship->damage =
+                    battleship->damage +
+                    escorts[i].impactPower;
+
                 printf("Escort Ship %d hit the Battleship.\n",
                        escorts[i].id);
 
-                printf("Battleship was destroyed by Escort Ship %d.\n",
-                       escorts[i].id);
+                printf("Damage caused: %.2f%%\n",
+                       escorts[i].impactPower * 100);
 
-                return;
+                printf("Battleship total damage: %.2f%%\n",
+                       battleship->damage * 100);
+
+                printf("Battleship health: %.2f%%\n",
+                       (1.0 - battleship->damage) * 100);
+
+                if (battleship->damage >= 1.0)
+                {
+                    battleship->destroyed = 1;
+
+                    printf("\nBattleship was destroyed by accumulated damage.\n");
+
+                    return;
+                }
             }
             else
             {
@@ -189,7 +212,10 @@ void attackBattleship(struct Battleship *battleship,
         }
     }
 
-    printf("All remaining Escort Ships missed the Battleship.\n");
+    if (hitCount == 0)
+    {
+        printf("All Escort Ships missed the Battleship.\n");
+    }
 }
 
 int countDestroyedEscorts(struct EscortShip escorts[],

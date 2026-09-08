@@ -5,63 +5,52 @@ Battlefield Size: 100.00
 ===== BATTLESHIP =====
 Type: U
 Position: (50.00, 50.00)
-Maximum Shell Velocity: 100.00
+Maximum Shell Velocity: 90.00
 
-Number of Escort Ships: 5
+Number of Escort Ships: 4
 
 ===== ESCORT SHIPS =====
 
 Escort Ship 1
-Type: ED
-Position: (86.98, 43.05)
+Type: EE
+Position: (35.34, 22.58)
 Minimum Velocity: 0.00
-Maximum Velocity: 70.00
-Actual Velocity: 19.14
-Minimum Angle: 50.00 degrees
+Maximum Velocity: 54.00
+Actual Velocity: 25.88
+Minimum Angle: 70.00 degrees
 Maximum Angle: 90.00 degrees
-Actual Angle: 54.59 degrees
-Impact Power: 0.05
+Actual Angle: 85.13 degrees
+Impact Power: 0.04
 
 Escort Ship 2
-Type: EC
-Position: (31.50, 26.66)
+Type: EE
+Position: (13.96, 62.90)
 Minimum Velocity: 0.00
-Maximum Velocity: 80.00
-Actual Velocity: 17.24
-Minimum Angle: 25.00 degrees
+Maximum Velocity: 54.00
+Actual Velocity: 27.91
+Minimum Angle: 70.00 degrees
 Maximum Angle: 90.00 degrees
-Actual Angle: 81.50 degrees
-Impact Power: 0.07
+Actual Angle: 81.71 degrees
+Impact Power: 0.04
 
 Escort Ship 3
-Type: ED
-Position: (31.14, 70.15)
+Type: EE
+Position: (53.09, 48.49)
 Minimum Velocity: 0.00
-Maximum Velocity: 70.00
-Actual Velocity: 62.56
-Minimum Angle: 50.00 degrees
+Maximum Velocity: 54.00
+Actual Velocity: 21.68
+Minimum Angle: 70.00 degrees
 Maximum Angle: 90.00 degrees
-Actual Angle: 86.05 degrees
-Impact Power: 0.05
+Actual Angle: 71.44 degrees
+Impact Power: 0.04
 
 Escort Ship 4
-Type: EA
-Position: (71.65, 97.32)
+Type: EC
+Position: (23.37, 52.35)
 Minimum Velocity: 0.00
-Maximum Velocity: 120.00
-Actual Velocity: 66.32
-Minimum Angle: 20.00 degrees
+Maximum Velocity: 72.00
+Actual Velocity: 51.67
+Minimum Angle: 25.00 degrees
 Maximum Angle: 90.00 degrees
-Actual Angle: 39.46 degrees
-Impact Power: 0.08
-
-Escort Ship 5
-Type: EA
-Position: (48.89, 22.47)
-Minimum Velocity: 0.00
-Maximum Velocity: 120.00
-Actual Velocity: 21.74
-Minimum Angle: 20.00 degrees
-Maximum Angle: 90.00 degrees
-Actual Angle: 44.18 degrees
-Impact Power: 0.08
+Actual Angle: 26.16 degrees
+Impact Power: 0.07

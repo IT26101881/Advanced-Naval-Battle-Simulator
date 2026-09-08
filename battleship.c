@@ -47,7 +47,8 @@ int battleshipAttack(struct Battleship *battleship,
 
     firingAngle = calculateFiringAngle(
         battleship->maxVelocity,
-        distance
+        distance,
+        battleship->minAngle
     );
 
     if (firingAngle == -1)
@@ -93,5 +94,3 @@ void attackAllEscorts(struct Battleship *battleship,
         }
     }
 }
-
-

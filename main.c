@@ -8,6 +8,7 @@
 #include "escort.h"
 #include "battlefield.h"
 #include "file_handler.h"
+#include "simulation.h"
 
 double generateRandomValue(double minimum, double maximum);
 
@@ -64,7 +65,8 @@ void generateBattleshipPositions(struct Battlefield *battlefield,
 void runSimulationAtPoint(struct Battlefield *battlefield,
                           double x,
                           double y,
-                          int pointNumber)
+                          int pointNumber,
+                          double minimumAngle)
 {
     double battleEndTime = 0;
     int wasDestroyed[100];
@@ -76,13 +78,22 @@ void runSimulationAtPoint(struct Battlefield *battlefield,
     battlefield->battleship.x = x;
     battlefield->battleship.y = y;
 
+    battlefield->battleship.minAngle = minimumAngle;
+
+    if (minimumAngle > 0)
+    {
+        printf("WARNING: Battleship gun is JAMMED!\n");
+        printf("Minimum firing angle is now %.2f degrees.\n",
+               minimumAngle);
+    }
+
     printf("Battleship Position: (%.2f, %.2f)\n",
            battlefield->battleship.x,
            battlefield->battleship.y);
 
     /*
-     * Remember which Escort Ships were already destroyed
-     * before this movement point.
+     * Remember which Escort Ships were alive
+     * before the Battleship fires.
      */
     for (int i = 0; i < battlefield->numberOfEscorts; i++)
     {
@@ -123,6 +134,9 @@ void runSimulationAtPoint(struct Battlefield *battlefield,
         printf("\nNo Escort Ships were hit at this position.\n");
     }
 
+    /*
+     * Check if the Battleship was destroyed.
+     */
     if (battlefield->battleship.destroyed == 1)
     {
         printf("\nBattleship was destroyed at Point %d.\n",
@@ -132,11 +146,19 @@ void runSimulationAtPoint(struct Battlefield *battlefield,
 
     printf("\nEnemy ships are returning fire...\n\n");
 
+    /*
+     * Escort Ships that were alive at the beginning
+     * of this battle position get their attack chance.
+     */
     attackBattleship(
         &battlefield->battleship,
         battlefield->escorts,
-        battlefield->numberOfEscorts
+        battlefield->numberOfEscorts,
+        wasDestroyed
     );
+
+    printf("Battleship total damage: %.2f%%\n",
+           battlefield->battleship.damage * 100);
 
     if (battlefield->battleship.destroyed == 1)
     {
@@ -181,10 +203,12 @@ int main()
 
     // Other initial values
 
+    battlefield.battleship.minAngle = 0;
+    battlefield.battleship.maxAngle = 90;
+
     battlefield.battleship.gamma = 0.001;
     battlefield.battleship.damage = 0;
     battlefield.battleship.destroyed = 0;
-
 
     // Number of escort ships
 
@@ -220,6 +244,15 @@ int main()
     printf("\nEnter number of Battleship movement points (k): ");
     scanf("%d", &k);
 
+    int jamPoint;
+    double jamAngle;
+
+    printf("Enter gun jam point (1-%d): ", k);
+    scanf("%d", &jamPoint);
+
+    printf("Enter minimum firing angle after jam (0-30): ");
+    scanf("%lf", &jamAngle);
+
     struct MovementPoint points[k];
 
     generateBattleshipPositions(
@@ -242,6 +275,9 @@ int main()
 
     printf("Maximum Shell Velocity: %.2f\n",
            battlefield.battleship.maxVelocity);
+
+    printf("Health: %.2f%%\n",
+            (1.0 - battlefield.battleship.damage) * 100);
 
     printf("Number of Escort Ships: %d\n",
            battlefield.numberOfEscorts);
@@ -285,10 +321,18 @@ int main()
                battlefield.escorts[i].impactPower);
     }
 
+    struct Battlefield simulation2Battlefield;
+
+    copyBattlefield(&battlefield, &simulation2Battlefield);
+
     saveInitialConditions(&battlefield);
 
     printf("\n\n====================================\n");
     printf("          NAVAL BATTLE\n");
+    printf("====================================\n");
+
+    printf("\n\n====================================\n");
+    printf("          SIMULATION 1\n");
     printf("====================================\n");
 
     for (int i = 0; i < k; i++)
@@ -304,17 +348,50 @@ int main()
             &battlefield,
             points[i].x,
             points[i].y,
-            i + 1
+            i + 1,
+            0
         );
 
         printf("\nEscort Ships destroyed so far: %d\n",
             countDestroyedEscorts(
                 battlefield.escorts,
                 battlefield.numberOfEscorts
-                ));
+            ));
+    }
+
+    printf("\n\n====================================\n");
+    printf("          SIMULATION 2\n");
+    printf("====================================\n");
+
+    for (int i = 0; i < k; i++)
+    {
+        if (simulation2Battlefield.battleship.destroyed == 1)
+        {
+            printf("\nBattleship has been destroyed.");
+            printf("\nSimulation stopped at Point %d.\n", i + 1);
+            break;
+        }
+
+        runSimulationAtPoint(
+            &simulation2Battlefield,
+            points[i].x,
+            points[i].y,
+            i + 1,
+            (i + 1 >= jamPoint) ? jamAngle : 0
+        );
+
+        printf("\nEscort Ships destroyed so far: %d\n",
+            countDestroyedEscorts(
+                simulation2Battlefield.escorts,
+                simulation2Battlefield.numberOfEscorts
+            ));
     }
 
     saveFinalBattlefield(&battlefield);
-   
+
+    saveSimulation2FinalBattlefield(
+        &simulation2Battlefield
+    );
+
     return 0;
 }

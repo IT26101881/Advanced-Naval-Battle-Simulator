@@ -12,6 +12,9 @@ struct Battleship
 
     double maxVelocity;
 
+    double minAngle;
+    double maxAngle;
+
     double gamma;
 
     double damage;
