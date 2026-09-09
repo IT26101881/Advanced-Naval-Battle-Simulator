@@ -171,9 +171,11 @@ void attackBattleship(struct Battleship *battleship,
     {
         /*
          * Only Escort Ships that were alive at the
-         * beginning of this battle position can fire.
+         * beginning of this battle position and
+         * have not fired yet can fire.
          */
-        if (wasDestroyed[i] == 0)
+        if (wasDestroyed[i] == 0 &&
+            escorts[i].hasFired == 0)
         {
             if (escortAttack(&escorts[i], battleship) == 1)
             {
@@ -195,6 +197,8 @@ void attackBattleship(struct Battleship *battleship,
                 printf("Battleship health: %.2f%%\n",
                        (1.0 - battleship->damage) * 100);
 
+                escorts[i].hasFired = 1;
+
                 if (battleship->damage >= 1.0)
                 {
                     battleship->destroyed = 1;
@@ -208,6 +212,8 @@ void attackBattleship(struct Battleship *battleship,
             {
                 printf("Escort Ship %d missed the Battleship.\n",
                        escorts[i].id);
+
+                escorts[i].hasFired = 1;
             }
         }
     }

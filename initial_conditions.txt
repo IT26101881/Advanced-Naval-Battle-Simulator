@@ -12,45 +12,45 @@ Number of Escort Ships: 4
 ===== ESCORT SHIPS =====
 
 Escort Ship 1
-Type: EE
-Position: (35.34, 22.58)
+Type: EA
+Position: (52.89, 26.12)
 Minimum Velocity: 0.00
-Maximum Velocity: 54.00
-Actual Velocity: 25.88
-Minimum Angle: 70.00 degrees
+Maximum Velocity: 108.00
+Actual Velocity: 55.41
+Minimum Angle: 20.00 degrees
 Maximum Angle: 90.00 degrees
-Actual Angle: 85.13 degrees
-Impact Power: 0.04
+Actual Angle: 28.32 degrees
+Impact Power: 0.08
 
 Escort Ship 2
-Type: EE
-Position: (13.96, 62.90)
+Type: EB
+Position: (16.18, 43.50)
 Minimum Velocity: 0.00
-Maximum Velocity: 54.00
-Actual Velocity: 27.91
-Minimum Angle: 70.00 degrees
+Maximum Velocity: 81.00
+Actual Velocity: 0.50
+Minimum Angle: 30.00 degrees
 Maximum Angle: 90.00 degrees
-Actual Angle: 81.71 degrees
-Impact Power: 0.04
+Actual Angle: 75.68 degrees
+Impact Power: 0.06
 
 Escort Ship 3
-Type: EE
-Position: (53.09, 48.49)
-Minimum Velocity: 0.00
-Maximum Velocity: 54.00
-Actual Velocity: 21.68
-Minimum Angle: 70.00 degrees
-Maximum Angle: 90.00 degrees
-Actual Angle: 71.44 degrees
-Impact Power: 0.04
-
-Escort Ship 4
 Type: EC
-Position: (23.37, 52.35)
+Position: (94.80, 63.31)
 Minimum Velocity: 0.00
 Maximum Velocity: 72.00
-Actual Velocity: 51.67
+Actual Velocity: 67.59
 Minimum Angle: 25.00 degrees
 Maximum Angle: 90.00 degrees
-Actual Angle: 26.16 degrees
+Actual Angle: 42.91 degrees
 Impact Power: 0.07
+
+Escort Ship 4
+Type: ED
+Position: (45.66, 18.85)
+Minimum Velocity: 0.00
+Maximum Velocity: 63.00
+Actual Velocity: 34.25
+Minimum Angle: 50.00 degrees
+Maximum Angle: 90.00 degrees
+Actual Angle: 71.29 degrees
+Impact Power: 0.05

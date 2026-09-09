@@ -23,6 +23,7 @@ struct EscortShip
     double hitTime;
 
     int destroyed;
+    int hasFired;
 };
 
 void generateEscortType(struct EscortShip *escort);

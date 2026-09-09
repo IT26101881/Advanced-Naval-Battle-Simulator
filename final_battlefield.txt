@@ -2,36 +2,36 @@
 
 ===== BATTLESHIP =====
 Type: U
-Position: (39.37, 57.66)
+Position: (34.09, 75.61)
 Maximum Velocity: 90.00
 Minimum Angle: 0.00 degrees
 Maximum Angle: 90.00 degrees
-Damage: 7.00%
-Health: 93.00%
+Damage: 20.00%
+Health: 80.00%
 Status: Survived
 
 ===== ESCORT SHIPS =====
 
 Escort Ship 1
-Type: EE
-Position: (35.34, 22.58)
+Type: EA
+Position: (52.89, 26.12)
 Status: Destroyed
-Time to Hit: 0.91 seconds
+Time to Hit: 0.33 seconds
 
 Escort Ship 2
-Type: EE
-Position: (13.96, 62.90)
+Type: EB
+Position: (16.18, 43.50)
 Status: Destroyed
-Time to Hit: 0.73 seconds
+Time to Hit: 0.13 seconds
 
 Escort Ship 3
-Type: EE
-Position: (53.09, 48.49)
+Type: EC
+Position: (94.80, 63.31)
 Status: Destroyed
-Time to Hit: 0.57 seconds
+Time to Hit: 0.79 seconds
 
 Escort Ship 4
-Type: EC
-Position: (23.37, 52.35)
+Type: ED
+Position: (45.66, 18.85)
 Status: Destroyed
-Time to Hit: 0.71 seconds
+Time to Hit: 0.32 seconds

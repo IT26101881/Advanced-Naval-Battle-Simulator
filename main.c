@@ -222,6 +222,7 @@ int main()
     for (int i = 0; i < battlefield.numberOfEscorts; i++)
     {
         battlefield.escorts[i].id = i + 1;
+        battlefield.escorts[i].hasFired = 0;
 
         printf("\nEscort Ship %d\n",
                battlefield.escorts[i].id);
