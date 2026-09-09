@@ -1,0 +1,24 @@
+
+===== BATTLE POSITION 1 =====
+Attack Order: E1 -> E2 -> E4 -> E3
+
+===== BATTLE POSITION 2 =====
+Attack Order: No Escort Ships in range
+
+===== BATTLE POSITION 3 =====
+Attack Order: No Escort Ships in range
+
+===== BATTLE POSITION 4 =====
+Attack Order: No Escort Ships in range
+
+===== BATTLE POSITION 1 =====
+Attack Order: E1 -> E2 -> E4 -> E3
+
+===== BATTLE POSITION 2 =====
+Attack Order: No Escort Ships in range
+
+===== BATTLE POSITION 3 =====
+Attack Order: No Escort Ships in range
+
+===== BATTLE POSITION 4 =====
+Attack Order: No Escort Ships in range

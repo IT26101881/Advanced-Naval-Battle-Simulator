@@ -2,11 +2,11 @@
 
 Battleship
 Type: U
-Position: (34.09, 75.61)
-Maximum Shell Velocity: 90.00
+Position: (94.67, 77.67)
+Maximum Shell Velocity: 110.00
 Minimum Firing Angle: 15.00
 Maximum Firing Angle: 90.00
-Damage: 0.20
+Damage: 0.05
 Destroyed: 0
 
 Escort Ships
@@ -14,25 +14,25 @@ Number of Escort Ships: 4
 
 Escort Ship 1
 Type: EA
-Position: (52.89, 26.12)
+Position: (82.35, 68.84)
 Destroyed: 1
-Hit Time: 0.33
+Hit Time: 0.08
 
 Escort Ship 2
-Type: EB
-Position: (16.18, 43.50)
+Type: EA
+Position: (64.20, 49.10)
 Destroyed: 1
-Hit Time: 0.13
-
-Escort Ship 3
-Type: EC
-Position: (94.80, 63.31)
-Destroyed: 1
-Hit Time: 0.79
+Hit Time: 2.19
 
 Escort Ship 4
-Type: ED
-Position: (45.66, 18.85)
+Type: EE
+Position: (77.72, 89.50)
 Destroyed: 1
-Hit Time: 0.32
+Hit Time: 4.27
+
+Escort Ship 3
+Type: ED
+Position: (8.77, 36.50)
+Destroyed: 1
+Hit Time: 6.70
 

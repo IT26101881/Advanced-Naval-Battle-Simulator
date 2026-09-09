@@ -11,4 +11,9 @@ void saveSimulation2FinalBattlefield(
     struct Battlefield *battlefield
 );
 
+void saveAttackOrder(
+    struct Battlefield *battlefield,
+    int pointNumber
+);
+
 #endif

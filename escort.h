@@ -19,11 +19,14 @@ struct EscortShip
 
     double impactPower;
     double gamma;
+    double firingInterval;
+    double nextFireTime;
 
     double hitTime;
 
     int destroyed;
     int hasFired;
+
 };
 
 void generateEscortType(struct EscortShip *escort);
@@ -45,7 +48,7 @@ int escortAttack(struct EscortShip *escort,
 void attackBattleship(struct Battleship *battleship,
                       struct EscortShip escorts[],
                       int numberOfEscorts,
-                      int wasDestroyed[]);
+                      double battleTime);
 
 int countDestroyedEscorts(struct EscortShip escorts[],
                           int numberOfEscorts);

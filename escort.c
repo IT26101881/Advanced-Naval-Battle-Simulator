@@ -57,6 +57,8 @@ void setEscortProperties(struct EscortShip *escort,
 
         escort->minVelocity = 0;
         escort->maxVelocity = 1.2 * battleshipMaxVelocity;
+
+        escort->firingInterval = 4.0;
     }
     else if (escort->type[1] == 'B')
     {
@@ -65,6 +67,8 @@ void setEscortProperties(struct EscortShip *escort,
 
         escort->minVelocity = 0;
         escort->maxVelocity = 0.9 * battleshipMaxVelocity;
+
+        escort->firingInterval = 5.0;
     }
     else if (escort->type[1] == 'C')
     {
@@ -73,6 +77,8 @@ void setEscortProperties(struct EscortShip *escort,
 
         escort->minVelocity = 0;
         escort->maxVelocity = 0.8 * battleshipMaxVelocity;
+
+        escort->firingInterval = 3.0;
     }
     else if (escort->type[1] == 'D')
     {
@@ -81,6 +87,8 @@ void setEscortProperties(struct EscortShip *escort,
 
         escort->minVelocity = 0;
         escort->maxVelocity = 0.7 * battleshipMaxVelocity;
+
+        escort->firingInterval = 6.0;
     }
     else
     {
@@ -89,6 +97,8 @@ void setEscortProperties(struct EscortShip *escort,
 
         escort->minVelocity = 0;
         escort->maxVelocity = 0.6 * battleshipMaxVelocity;
+
+        escort->firingInterval = 7.0;
     }
 
     escort->maxAngle = 90;
@@ -132,10 +142,7 @@ int escortCanReachBattleship(struct EscortShip *escort,
         battleship->y
     );
 
-    range = calculateRange(
-        escort->velocity,
-        escort->angle
-    );
+    range = calculateRange(escort->velocity, escort->angle);
 
     if (distance <= range)
     {
@@ -160,24 +167,27 @@ int escortAttack(struct EscortShip *escort,
     }
 }
 
-void attackBattleship(struct Battleship *battleship,
-                      struct EscortShip escorts[],
-                      int numberOfEscorts,
-                      int wasDestroyed[])
+void attackBattleship(
+    struct Battleship *battleship,
+    struct EscortShip escorts[],
+    int numberOfEscorts,
+    double battleTime
+)
 {
     int hitCount = 0;
 
     for (int i = 0; i < numberOfEscorts; i++)
     {
         /*
-         * Only Escort Ships that were alive at the
-         * beginning of this battle position and
-         * have not fired yet can fire.
+         * Escort Ship can fire if it is alive
+         * and its firing time has been reached.
          */
-        if (wasDestroyed[i] == 0 &&
-            escorts[i].hasFired == 0)
+        if (escorts[i].destroyed == 0 &&
+                battleTime >= escorts[i].nextFireTime)
         {
-            if (escortAttack(&escorts[i], battleship) == 1)
+            if (escortAttack(
+                    &escorts[i],
+                    battleship) == 1)
             {
                 hitCount++;
 
@@ -185,8 +195,9 @@ void attackBattleship(struct Battleship *battleship,
                     battleship->damage +
                     escorts[i].impactPower;
 
-                printf("Escort Ship %d hit the Battleship.\n",
-                       escorts[i].id);
+                printf("Escort Ship %d fired at %.2f seconds and hit the Battleship.\n",
+                        escorts[i].id,
+                        battleTime);
 
                 printf("Damage caused: %.2f%%\n",
                        escorts[i].impactPower * 100);
@@ -197,7 +208,13 @@ void attackBattleship(struct Battleship *battleship,
                 printf("Battleship health: %.2f%%\n",
                        (1.0 - battleship->damage) * 100);
 
-                escorts[i].hasFired = 1;
+                /*
+                 * Schedule the Escort Ship's
+                 * next firing time.
+                 */
+                escorts[i].nextFireTime =
+                    escorts[i].nextFireTime +
+                    escorts[i].firingInterval;
 
                 if (battleship->damage >= 1.0)
                 {
@@ -210,17 +227,24 @@ void attackBattleship(struct Battleship *battleship,
             }
             else
             {
-                printf("Escort Ship %d missed the Battleship.\n",
-                       escorts[i].id);
+                printf("Escort Ship %d fired at %.2f seconds and missed the Battleship.\n",
+                        escorts[i].id,
+                        battleTime);
 
-                escorts[i].hasFired = 1;
+                /*
+                 * Even after a miss, the Escort Ship
+                 * must wait until its next firing time.
+                 */
+                escorts[i].nextFireTime =
+                    escorts[i].nextFireTime +
+                    escorts[i].firingInterval;
             }
         }
     }
 
     if (hitCount == 0)
     {
-        printf("All Escort Ships missed the Battleship.\n");
+        printf("No Escort Ships fired at this time.\n");
     }
 }
 

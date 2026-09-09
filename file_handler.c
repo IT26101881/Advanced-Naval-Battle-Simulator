@@ -215,3 +215,55 @@ void saveSimulation2FinalBattlefield(
 
     printf("Simulation 2 final battlefield saved to simulation2_final_battlefield.txt\n");
 }
+
+void saveAttackOrder(
+    struct Battlefield *battlefield,
+    int pointNumber
+)
+{
+    FILE *file;
+
+    file = fopen("attack_order.txt", "a");
+
+    if (file == NULL)
+    {
+        printf("Error: Could not create attack_order.txt\n");
+        return;
+    }
+
+    fprintf(file, "\n===== BATTLE POSITION %d =====\n",
+            pointNumber);
+
+    fprintf(file, "Attack Order: ");
+
+    int first = 1;
+
+    for (int i = 0; i < battlefield->numberOfEscorts; i++)
+    {
+        if (battlefield->escorts[i].destroyed == 0 &&
+            battleshipCanReach(
+                &battlefield->battleship,
+                &battlefield->escorts[i]
+            ) == 1)
+        {
+            if (first == 0)
+            {
+                fprintf(file, " -> ");
+            }
+
+            fprintf(file, "E%d",
+                    battlefield->escorts[i].id);
+
+            first = 0;
+        }
+    }
+
+    if (first == 1)
+    {
+        fprintf(file, "No Escort Ships in range");
+    }
+
+    fprintf(file, "\n");
+
+    fclose(file);
+}
